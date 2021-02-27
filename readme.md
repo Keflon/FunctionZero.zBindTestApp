@@ -6,7 +6,7 @@ rather than just a `property`
 Put simply, it allows you to do things like this:
 ```xaml
 <StackLayout 
-	IsVisible={z:Bind (Item.Count != 0) AND (Status == 'Administrator'} > ...
+	IsVisible="{z:Bind (Item.Count != 0) AND (Status == 'Administrator'}" > ...
 ```
 
 And much more.
@@ -76,7 +76,7 @@ double Lerp(double a, double b, double t)
 ```
 For use like this:
 ```xaml
-<Label Rotation={z:Bind Lerp(0, 360, rotationPercent / 100.0)} ...
+<Label Rotation="{z:Bind Lerp(0, 360, rotationPercent / 100.0)}" ...
 ```
 First you will need a reference to the default ExpressionParser
 ```csharp
@@ -144,8 +144,8 @@ parser.RegisterOverload("+", OperandType.Long, OperandType.String,
 Putting the above into action, you can then start to really have some fun
 ```xaml
 <Label 
-    Text={z:Bind 'Player 1 score ` + playerOne.Score + 'points'}
-    Rotation={z:Bind Lerp(0, 360, rotationPercent / 100.0)}
+    Text="{z:Bind 'Player 1 score ` + playerOne.Score + 'points'}"
+    Rotation="{z:Bind Lerp(0, 360, rotationPercent / 100.0)}"
 />
 ```
 If that's not enough, you can entirely replace the `ExpressionParser` with your own by calling `ExpressionParserFactory.ReplaceDefaultExpressionParser(..)` This is how `z:Bind` creates the default parser and can be used as a guide to creating your own:
