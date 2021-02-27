@@ -34,10 +34,25 @@ And that's all there is to it, you can now `z:Bind` to any properties in your Vi
 |Sample|Notes|
 |--|:--:|
 |`{z:Bind Count}`| Bind to `Count`|
+|`{z:Bind IsExpanded, Source={x:Reference MyExpander}}`|Bind to a property on an element named  `MyExpander`|
 |`{z:Bind Count * 2}`| Bind to an expression that yields Count * 2|
 |`{z:Bind (Count * 2) LT 10}`| True if (Count * 2) < 10|
 |`{z:Bind Sin(Count / 25.0)}`| Calls a _function_ (see below)|
-|`{z:Bind IsExpanded, Source={x:Reference MyExpander}}`|Bind to a property on an element named  `MyExpander`|
+
+## The Great Escape, and other cautionary tales
+### Commas
+If your _expression string_ has commas in it, you must hide them from the xaml parser, otherwise `z:Bind` will be given an incomplete string and things won't work as expected. 
+
+You can do this by enclosing the string inside quotes, like this:
+```xaml
+{z:Bind 'SomeFunction(param1, param2)'}
+```
+### Casting
+Numeric constants will be of type `long` unless they have a fractional part, so `Sin(1)` will fail, because the `Sin` function expects a `double`. `Sin(1.0)` comes to the rescue.
+### Short-circuit
+Unlike `c#` the underlying expression parser does not support short-circuit, so be careful with expressions like `(thing != null) AND (thing.part == 5)`
+### Errors
+Error reporting is quite good, so check the debug output if things aren't working as expected.
 
 ### Aliases supported to simplify xaml
 |Operator|Alias|
@@ -62,6 +77,7 @@ Lower precision types (`int`, `char`, `float` etc) are cast to their appropriate
 ## Advanced Usage - Functions, aliases and operator-overloads
  `z:Bind` uses [`FunctionZero.ExpressionParserZero`](https://github.com/Keflon/FunctionZero.ExpressionParserZero) to do the heavy lifting, so take a look at the [documentation](https://github.com/Keflon/FunctionZero.ExpressionParserZero)
 if you want to take a deeper dive. Here is a taster ...
+
 ### Functions
 `Sin`, `Cos` and `Tan` are registered by default, as are the _aliases_ listed above.
 ```xaml
@@ -74,27 +90,27 @@ double Lerp(double a, double b, double t)
   return a + t * (b - a);
 }
 ```
-For use like this:
+For use like this: (Note the expression is enclosed in quotes because it contains commas)
 ```xaml
-<Label Rotation="{z:Bind Lerp(0, 360, rotationPercent / 100.0)}" ...
+<Label Rotation="{z:Bind 'Lerp(0, 360, rotationPercent / 100.0)'}" ...
 ```
 First you will need a reference to the default ExpressionParser
 ```csharp
 var ep = ExpressionParserFactory.GetExpressionParser();
 ```
-Then _register_ a _function_ that takes 3 parameters:
+Then _register_ a _function_ that takes 3 parameters: (Note, at time of writing, the parameter count is not enforced or meaningful)
 ```csharp
 ep.RegisterFunction("Lerp", DoLerp, 3);
 ```
 Finally write the `DoLerp` method referenced above, with the following signature:
 ```csharp
-private static void DoLerp(Stack<IOperand> stack, IBackingStore backingStore, long paramCount)
+private static void DoLerp(Stack<IOperand> operandStack, IBackingStore backingStore, long paramCount)
 {
     // Pop the correct number of parameters from the operands stack, ** in reverse order **
     // If an operand is a variable, it is resolved from the backing store provided
-    IOperand third = OperatorActions.PopAndResolve(operands, backingStore);
-    IOperand second = OperatorActions.PopAndResolve(operands, backingStore);
-    IOperand first = OperatorActions.PopAndResolve(operands, backingStore);
+    IOperand third = OperatorActions.PopAndResolve(operandStack, backingStore);
+    IOperand second = OperatorActions.PopAndResolve(operandStack, backingStore);
+    IOperand first = OperatorActions.PopAndResolve(operandStack, backingStore);
 
     double a = (double)first.GetValue();
     double b = (double)second.GetValue();
@@ -104,7 +120,7 @@ private static void DoLerp(Stack<IOperand> stack, IBackingStore backingStore, lo
     double result = a + t * (b - a);
 
     // Push the result back onto the operand stack
-    stack.Push(new Operand(-1, OperandType.Double, result));
+    operandStack.Push(new Operand(-1, OperandType.Double, result));
 }
 ```
 
@@ -120,7 +136,7 @@ Then register a new `operator` and use the existing `matrix` for `&&`
 ep.RegisterOperator("AND", 4, LogicalAndMatrix.Create());
 ```
 ### Overloads
-Suppose you want to add a `long` to a `string`
+Suppose you want to add a `long` to a `string`, yielding a result of type `string`
 
 Get a reference to the default ExpressionParser:
 ```csharp

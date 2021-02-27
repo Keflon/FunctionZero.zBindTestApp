@@ -18,6 +18,7 @@ namespace FunctionZero.zBindTestApp.Boilerplate
 
             var container = new Container();
             container.Options.ResolveUnregisteredConcreteTypes = false;
+
 #if PRODUCTION
             container.Options.EnableAutoVerification = false;
 #else
