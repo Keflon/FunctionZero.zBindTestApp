@@ -3,14 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:z="clr-namespace:FunctionZero.zBind.z;assembly=FunctionZero.zBind"
              x:Class="FunctionZero.zBindTestApp.Mvvm.Pages.HomePage">
     <ContentPage.Content>
-        <Grid HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
-            <Label Text="Welcome to z:Bind!"
+        <Grid>
+            <Label Text="Welcome to z:Bind!" HorizontalOptions="Center" VerticalOptions="Center"
                 TranslationX="{z:Bind Sin(Count / 25.0) * 100.0}"
                 TranslationY="{z:Bind Cos(Count / 15.0) * 100}"
                 Rotation="{z:Bind Sin(Count / 5.0) * 20}"
                 Scale="{z:Bind Value * 3 + 1, Source={x:Reference TheSlider}}"
              />
-            <Slider x:Name="TheSlider" Minimum="0" Maximum="1" Value="0.5"/>
+            <Slider x:Name="TheSlider" Minimum="0" Maximum="1" Value="0.5" MinimumWidthRequest="200" HorizontalOptions="Fill" VerticalOptions="Center"/>
         </Grid>
     </ContentPage.Content>
 </ContentPage>

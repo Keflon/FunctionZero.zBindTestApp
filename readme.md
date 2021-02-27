@@ -148,7 +148,7 @@ Putting the above into action, you can then start to really have some fun
     Rotation={z:Bind Lerp(0, 360, rotationPercent / 100.0)}
 />
 ```
-If that's not enough, you can entirely replace the `ExpressionParser` with your own by calling `ReplaceDefaultExpressionParser`. This is how `z:Bind` creates the default parser and can be used as a guide to creating your own:
+If that's not enough, you can entirely replace the `ExpressionParser` with your own by calling `ExpressionParserFactory.ReplaceDefaultExpressionParser(..)` This is how `z:Bind` creates the default parser and can be used as a guide to creating your own:
 ```csharp
 var ep = new ExpressionParser();
 
