@@ -1,4 +1,5 @@
 ﻿using FunctionZero.MvvmZero;
+using FunctionZero.zBindTestApp.Mvvm.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -19,7 +20,10 @@ namespace FunctionZero.zBindTestApp.Mvvm.PageViewModels
 
         public HomePageVm()
         {
+            TestInstance = new TestClass();
         }
+
+        public TestClass TestInstance { get; }
 
         public async Task InitAsync()
         {

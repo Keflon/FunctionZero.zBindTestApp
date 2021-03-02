@@ -9,7 +9,7 @@ Put simply, it allows you to do things like this:
 	IsVisible="{z:Bind (Item.Count != 0) AND (Status == 'Administrator'}" > ...
 ```
 
-And much more.
+`Expressions` are re-evaluated only if a `property` on which they depend changes
 
 ## Features
 
@@ -48,7 +48,7 @@ You can do this by enclosing the string inside quotes, like this:
 {z:Bind 'SomeFunction(param1, param2)'}
 ```
 ### Casting
-Numeric constants will be of type `long` unless they have a fractional part, so `Sin(1)` will fail, because the `Sin` function expects a `double`. `Sin(1.0)` comes to the rescue.
+Numeric constants will be of type `long` unless they have a fractional part, so `Sin(1)` will fail, because the `Sin` function expects a `double`; `Sin(1.0)` comes to the rescue.
 ### Short-circuit
 Unlike `c#` the underlying expression parser does not support short-circuit, so be careful with expressions like `(thing != null) AND (thing.part == 5)`
 ### Errors
@@ -210,3 +210,22 @@ private static void DoTan(Stack<IOperand> stack, IBackingStore store, long param
 }
 ```
 
+## Even more ...
+
+### Assignment operator:
+```xaml
+<Label Text="{z:Bind 'Sample.Value = Interest * Complexity'}" />
+```
+### Comma operator
+Evaluate multiple expressions, provide the result of the last
+```xaml
+<Label Text="{z:Bind 'Test.Value = Count, Count * 2'}" />
+```
+### Caution
+```xaml
+<!--    This will (of course) lock up the main thread, 
+        because it is re-evaluated every time `a` changes -->
+<Label Text={z:Bind a = a + 1} />
+```
+## Notes
+Expressions are reevaluated only when one of the `properties` they reference change.

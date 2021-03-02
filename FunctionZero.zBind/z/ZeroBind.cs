@@ -20,11 +20,18 @@ namespace FunctionZero.zBind.z
 
         public object Source { get; set; }
 
+        /// <summary>
+        /// For internal use.
+        /// </summary>
+        public object ConstantResult { get; set; }
+
         public Bind()
         {
         }
 
         private MultiBinding _multiBind;
+
+        internal BindableObject BindableTarget { get; private set; }
 
         public BindingBase ProvideValue(IServiceProvider serviceProvider)
         {
@@ -37,13 +44,13 @@ namespace FunctionZero.zBind.z
             }
 
             IProvideValueTarget pvt = serviceProvider.GetService(typeof(IProvideValueTarget)) as IProvideValueTarget;
-            BindableObject bindableTarget = pvt.TargetObject as BindableObject;
+            BindableTarget = pvt.TargetObject as BindableObject;
             //BindableProperty bindableProperty = pvt.TargetProperty as BindableProperty;
 
             //bindableTarget.BindingContextChanged += TargetOnBindingContextChanged;
             //bindableTarget.SetValue(bindableProperty, 32);
 
-            var bindingSourceObject = Source ?? bindableTarget.BindingContext;
+            var bindingSourceObject = Source ?? BindableTarget.BindingContext;
 
             var ep = ExpressionParserFactory.GetExpressionParser();
 
@@ -67,16 +74,29 @@ namespace FunctionZero.zBind.z
                         }
                     }
                 }
-                _multiBind.Converter = new EvaluatorMultiConverter(_bindingLookup, compiledExpression);
+                _multiBind.Converter = new EvaluatorMultiConverter(_bindingLookup, compiledExpression, this);
+
+                if(_bindingLookup.Count == 0)
+                {
+                    // The expression is a constant, so there is nothing to bind to. Evaluate it and return a suitable dummy Binding.
+                    var stack = compiledExpression.Evaluate(null);
+                    var operand = stack.Pop();
+                    ConstantResult = operand.GetValue();
+                    return new Binding("ConstantResult", BindingMode.OneTime, null, null, null, this);
+                }
             }
             catch (ExpressionParserException ex)
             {
                 IXmlLineInfo lineInfo = serviceProvider.GetService(typeof(IXmlLineInfoProvider)) is IXmlLineInfoProvider lineInfoProvider ? lineInfoProvider.XmlLineInfo : new XmlLineInfo();
-                Debug.WriteLine(
+                string problem = 
                     $"z:Bind exception at line {lineInfo.LineNumber}, Column {lineInfo.LinePosition + ex.Offset}: " + Environment.NewLine +
                     $"Expression '{Expression}' error at offset {ex.Offset} - " +
-                    ex.Message);
-                return new Binding("_dummy_value_");
+                    ex.Message + Environment.NewLine +
+                    "If your expression contains commas remember to enclose the expression within quotes, or the xaml parser will truncate it";
+
+                Debug.WriteLine(problem);
+                ConstantResult = problem;
+                return new Binding("ConstantResult", BindingMode.OneTime, null, null, null, this);
             }
             return _multiBind;
         }

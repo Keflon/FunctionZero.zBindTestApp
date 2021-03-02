@@ -12,9 +12,9 @@ namespace FunctionZero.zBind.z
         private readonly VariableEvaluator _evaluator;
         private readonly TokenList _compiledExpression;
 
-        public EvaluatorMultiConverter(ICollection<string> keys, TokenList compiledExpression)
+        public EvaluatorMultiConverter(ICollection<string> keys, TokenList compiledExpression, Bind bindingExtension)
         {
-            _evaluator = new VariableEvaluator(new List<string>(keys));
+            _evaluator = new VariableEvaluator(new List<string>(keys), bindingExtension);
             _compiledExpression = compiledExpression;
         }
 
