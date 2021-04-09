@@ -43,22 +43,28 @@ namespace FunctionZero.zBind.z
                 throw new XamlParseException("ZeroBind requires 'Expression' property to be set", lineInfo);
             }
 
-            IProvideValueTarget pvt = serviceProvider.GetService(typeof(IProvideValueTarget)) as IProvideValueTarget;
-            BindableTarget = pvt.TargetObject as BindableObject;
-            //BindableProperty bindableProperty = pvt.TargetProperty as BindableProperty;
+            object bindingSourceObject;
 
-            //bindableTarget.BindingContextChanged += TargetOnBindingContextChanged;
-            //bindableTarget.SetValue(bindableProperty, 32);
+            if (Source != null)
+            {
+                bindingSourceObject = Source;
+            }
+            else
+            {
+                IProvideValueTarget pvt = serviceProvider.GetService(typeof(IProvideValueTarget)) as IProvideValueTarget;
+                BindableTarget = pvt.TargetObject as BindableObject;
 
-            var bindingSourceObject = Source ?? BindableTarget.BindingContext;
+                bindingSourceObject = BindableTarget.BindingContext;
+            }
 
             var ep = ExpressionParserFactory.GetExpressionParser();
 
-            _multiBind = new MultiBinding();
-
             try
             {
+                _multiBind = new MultiBinding();
+
                 var compiledExpression = ep.Parse(Expression);
+
                 foreach (IToken item in compiledExpression)
                 {
                     if (item is Operand op)
@@ -76,19 +82,20 @@ namespace FunctionZero.zBind.z
                 }
                 _multiBind.Converter = new EvaluatorMultiConverter(_bindingLookup, compiledExpression, this);
 
-                if(_bindingLookup.Count == 0)
+                if (_bindingLookup.Count == 0)
                 {
                     // The expression is a constant, so there is nothing to bind to. Evaluate it and return a suitable dummy Binding.
                     var stack = compiledExpression.Evaluate(null);
                     var operand = stack.Pop();
                     ConstantResult = operand.GetValue();
-                    return new Binding("ConstantResult", BindingMode.OneTime, null, null, null, this);
+                    return new Binding(nameof(ConstantResult), BindingMode.OneTime, null, null, null, this);
                 }
+                return _multiBind;
             }
             catch (ExpressionParserException ex)
             {
                 IXmlLineInfo lineInfo = serviceProvider.GetService(typeof(IXmlLineInfoProvider)) is IXmlLineInfoProvider lineInfoProvider ? lineInfoProvider.XmlLineInfo : new XmlLineInfo();
-                string problem = 
+                string problem =
                     $"z:Bind exception at line {lineInfo.LineNumber}, Column {lineInfo.LinePosition + ex.Offset}: " + Environment.NewLine +
                     $"Expression '{Expression}' error at offset {ex.Offset} - " +
                     ex.Message + Environment.NewLine +
@@ -98,7 +105,7 @@ namespace FunctionZero.zBind.z
                 ConstantResult = problem;
                 return new Binding("ConstantResult", BindingMode.OneTime, null, null, null, this);
             }
-            return _multiBind;
+
         }
 
         object IMarkupExtension.ProvideValue(IServiceProvider serviceProvider)

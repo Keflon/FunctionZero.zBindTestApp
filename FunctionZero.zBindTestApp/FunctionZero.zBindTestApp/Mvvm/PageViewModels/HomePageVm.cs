@@ -27,7 +27,7 @@ namespace FunctionZero.zBindTestApp.Mvvm.PageViewModels
 
         public async Task InitAsync()
         {
-            //throw new NotImplementedException();
+            // Called when the page is pushed
         }
 
         private bool MyTimerCallback()
