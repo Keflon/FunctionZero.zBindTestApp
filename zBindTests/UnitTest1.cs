@@ -7,30 +7,29 @@ namespace zBindTests
     [TestClass]
     public class UnitTest1 : INotifyPropertyChanged
     {
-        private int testIntResult;
-
         public event PropertyChangedEventHandler PropertyChanged;
 
         [TestMethod]
-        public void TestMethod1()
+        public void TestBindToInt()
         {
-            var binding = new Bind(this, nameof(TestIntResult));
-            TestIntResult = 5;
+            var host = new TestClass(null, 5);
+            var binding = new Bind(host, nameof(TestClass.TestIntResult));
             Assert.AreEqual(5, binding.Value);
+
+            host.TestIntResult++;
+            Assert.AreEqual(6, binding.Value);
         }
 
-        public int TestIntResult
+        [TestMethod]
+        public void TestBindToNestedInt()
         {
-            get
-            {
-                return testIntResult;
-            }
-            set
-            {
+            var host = new TestClass(new TestClass(null, 6), 5);
+            var binding = new Bind(host, $"{nameof(TestClass.Child)}.{nameof(TestClass.TestIntResult)}");
+            Assert.AreEqual(6, binding.Value);
 
-                testIntResult = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TestIntResult)));
-            }
+            host.Child.TestIntResult++;
+            Assert.AreEqual(7, binding.Value);
         }
+
     }
 }
