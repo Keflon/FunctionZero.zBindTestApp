@@ -1,4 +1,4 @@
-using FunctionZero.zBind.z;
+using FunctionZero.zBind.f;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.ComponentModel;
 
@@ -14,12 +14,9 @@ namespace zBindTests
         [TestMethod]
         public void TestMethod1()
         {
-            var binding = new Bind();
-            binding.Source = this;
-            binding.Expression = "TestIntResult = TestIntResult+4";
-            binding.ProvideValue(null);
+            var binding = new Bind(this, nameof(TestIntResult));
             TestIntResult = 5;
-            Assert.AreEqual(9, TestIntResult);
+            Assert.AreEqual(5, binding.Value);
         }
 
         public int TestIntResult
