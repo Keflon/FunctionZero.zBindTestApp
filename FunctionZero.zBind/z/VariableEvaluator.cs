@@ -54,7 +54,7 @@ namespace FunctionZero.zBind.z
             return (OperandType.Object, value);
         }
 
-        private char[] _dot = new[] { '.' };
+        private static char[] _dot = new[] { '.' };
 
         public void SetValue(string qualifiedName, object value)
         {
