@@ -160,7 +160,7 @@ parser.RegisterOverload("+", OperandType.Long, OperandType.String,
 Putting the above into action, you can then start to really have some fun
 ```xaml
 <Label 
-    Text="{z:Bind 'Player 1 score ` + playerOne.Score + 'points'}"
+    Text="{z:Bind 'Player 1 score ' + playerOne.Score + 'points'}"
     Rotation="{z:Bind Lerp(0, 360, rotationPercent / 100.0)}"
 />
 ```

@@ -1,5 +1,3 @@
-# FunctionZero.zBind
-
 `z:Bind` is a `xaml` markup extension for `Xamarin.Forms` that allows you to bind directly to an `expression` 
 
 If you want to do things like this:
