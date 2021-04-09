@@ -83,3 +83,4 @@ namespace FunctionZero.zBind.f
     }
 }
 // One hour 21 minutes.
+// Two hours 12 minutes to first 3 unit tests working (property, nested property, changing property on path)

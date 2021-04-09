@@ -42,5 +42,19 @@ namespace zBindTests
             host.Child = new TestClass(null, -11);
             Assert.AreEqual(-11, binding.Value);
         }
+
+        [TestMethod]
+        public void TestBindToReplacedNestedNestedInt()
+        {
+            var host = new TestClass(new TestClass(new TestClass(null, 41), 6), 5);
+            var binding = new Bind(host, $"{nameof(TestClass.Child)}.{nameof(TestClass.Child)}.{nameof(TestClass.TestIntResult)}");
+            Assert.AreEqual(41, binding.Value);
+
+            host.Child.Child.TestIntResult++;
+            Assert.AreEqual(42, binding.Value);
+
+            host.Child = new TestClass(new TestClass(null, -42), -99);
+            Assert.AreEqual(-42, binding.Value);
+        }
     }
 }
