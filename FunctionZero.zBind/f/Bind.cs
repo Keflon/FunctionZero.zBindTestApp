@@ -47,7 +47,7 @@ namespace FunctionZero.zBind.f
             _partValue = _propertyInfo.GetValue(_host);
 
             _isLeaf = _currentIndex >= _bits.Length - 1;
-            if (_isLeaf == false)
+            if ((_isLeaf == false) && (_partValue != null))
                 _child = new Bind(_bindingRoot, _partValue, _bits, _currentIndex + 1);
             else
                 _bindingRoot.Value = _partValue;
@@ -74,7 +74,7 @@ namespace FunctionZero.zBind.f
                 // Refresh the value of the property
                 _partValue = _propertyInfo.GetValue(_host);
 
-                if (_isLeaf == false)
+                if ((_isLeaf == false) && (_partValue != null))
                     _child = new Bind(_bindingRoot, _partValue, _bits, _currentIndex + 1);
                 else
                     _bindingRoot.Value = _partValue;
