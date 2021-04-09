@@ -40,6 +40,7 @@ namespace zBindTests
             Assert.AreEqual(7, binding.Value);
 
             host.Child = new TestClass(null, -11);
+            Assert.AreEqual(-11, binding.Value);
         }
     }
 }
