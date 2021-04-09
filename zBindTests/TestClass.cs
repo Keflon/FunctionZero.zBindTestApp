@@ -46,9 +46,9 @@ namespace zBindTests
                 if (value != _child)
                 {
                     _child = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Child)));
-                }
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Child)));
             }
+        }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
