@@ -19,6 +19,7 @@ namespace FunctionZero.zBind.f
         private string _propertyName;
         private Bind _child;
 
+        private object _partValue;
         public object Value { get; set; }
 
         public Bind(object host, string qualifiedName) : this(null, host, qualifiedName.Split(_dot), 0) { }
@@ -43,11 +44,13 @@ namespace FunctionZero.zBind.f
                 inpc.PropertyChanged += HostPropertyChanged;
 
             // Refresh the value of the property
-            Value = _propertyInfo.GetValue(_host);
+            _partValue = _propertyInfo.GetValue(_host);
 
-            _isLeaf = _currentIndex < _bits.Length;
+            _isLeaf = _currentIndex >= _bits.Length - 1;
             if (_isLeaf == false)
-                _child = new Bind(_bindingRoot, Value, _bits, _currentIndex + 1);
+                _child = new Bind(_bindingRoot, _partValue, _bits, _currentIndex + 1);
+            else
+                _bindingRoot.Value = _partValue;
         }
 
         // Called by parent
@@ -69,10 +72,12 @@ namespace FunctionZero.zBind.f
                     _child.DetachFromProperty();
 
                 // Refresh the value of the property
-                Value = _propertyInfo.GetValue(_host);
+                _partValue = _propertyInfo.GetValue(_host);
 
                 if (_isLeaf == false)
-                    _child = new Bind(_bindingRoot, Value, _bits, _currentIndex + 1);
+                    _child = new Bind(_bindingRoot, _partValue, _bits, _currentIndex + 1);
+                else
+                    _bindingRoot.Value = _partValue;
             }
         }
     }
