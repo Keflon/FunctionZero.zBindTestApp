@@ -12,12 +12,10 @@ namespace zBindTests
         {
             var host = new TestClass(null, 5);
             var binding = new ExpressionBind(host, "TestIntResult * 2");
-            binding.Evaluate();
-            Assert.AreEqual(10, (int)(long)binding.Value);
+            Assert.AreEqual(10, (int)(long)binding.Result);
 
             host.TestIntResult++;
-            binding.Evaluate();
-            Assert.AreEqual(12, (int)(long)binding.Value);
+            Assert.AreEqual(12, (int)(long)binding.Result);
         }
 
         [TestMethod]
@@ -25,11 +23,10 @@ namespace zBindTests
         {
             var host = new TestClass(null, 5);
             var binding = new ExpressionBind(host, "TestIntResult * 2");
-            binding.ValueIsStale += (s, e) => ((ExpressionBind)s).Evaluate();
-            Assert.AreEqual(10, (int)(long)binding.Value);
+            Assert.AreEqual(10, (int)(long)binding.Result);
 
             host.TestIntResult++;
-            Assert.AreEqual(12, (int)(long)binding.Value);
+            Assert.AreEqual(12, (int)(long)binding.Result);
         }
 
         [TestMethod]
@@ -38,12 +35,10 @@ namespace zBindTests
             var host = new TestClass(new TestClass(new TestClass(null, 41), 6), 5);
 
             var binding = new ExpressionBind(host, $"(Child.TestIntResult + Child.Child.TestIntResult) * TestIntResult");
-            binding.Evaluate();
-            Assert.AreEqual((6 + 41) * 5, (int)(long)binding.Value);
+            Assert.AreEqual((6 + 41) * 5, (int)(long)binding.Result);
 
             host.Child.TestIntResult++;
-            binding.Evaluate();
-            Assert.AreEqual((7 + 41) * 5, (int)(long)binding.Value);
+            Assert.AreEqual((7 + 41) * 5, (int)(long)binding.Result);
         }
 
         [TestMethod]
@@ -52,12 +47,10 @@ namespace zBindTests
             var host = new TestClass(new TestClass(new TestClass(null, 41), 6), 5);
 
             var binding = new ExpressionBind(host, $"(Child.TestIntResult + Child.Child.TestIntResult) * TestIntResult");
-            binding.ValueIsStale += (s, e) => ((ExpressionBind)s).Evaluate();
-            Assert.AreEqual((6 + 41) * 5, (int)(long)binding.Value);
+            Assert.AreEqual((6 + 41) * 5, (int)(long)binding.Result);
 
             host.Child.TestIntResult++;
-            binding.Evaluate();
-            Assert.AreEqual((7 + 41) * 5, (int)(long)binding.Value);
+            Assert.AreEqual((7 + 41) * 5, (int)(long)binding.Result);
         }
     }
 }

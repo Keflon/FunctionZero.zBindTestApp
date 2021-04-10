@@ -52,6 +52,7 @@ namespace FunctionZero.yBind
 
         public void SetValue(string qualifiedName, object value)
         {
+            throw new NotImplementedException();
             //var host = _bindingExtension.Source ?? _bindingExtension.BindableTarget.BindingContext;
             //if (host != null)
             //{

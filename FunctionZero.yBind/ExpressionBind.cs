@@ -2,6 +2,7 @@
 using FunctionZero.ExpressionParserZero.Tokens;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace FunctionZero.yBind
@@ -29,23 +30,23 @@ namespace FunctionZero.yBind
             }
         }
 
-        private object _value;
+        private object _result;
 
-        public object Value
+        public object Result
         {
-            get => _value;
+            get { return Evaluate(); }
             set
             {
                 IsStale = false;
-                if (value != _value)
+                if (value != _result)
                 {
-                    _value = value;
-                    ValueChanged?.Invoke(this, new ValueChangedEventArgs(value));
+                    _result = value;
+                    ResultChanged?.Invoke(this, new ValueChangedEventArgs(value));
                 }
             }
         }
 
-        public event EventHandler<ValueChangedEventArgs> ValueChanged;
+        public event EventHandler<ValueChangedEventArgs> ResultChanged;
         public event EventHandler<EventArgs> ValueIsStale;
 
         public ExpressionBind(object host, string expression)
@@ -75,7 +76,7 @@ namespace FunctionZero.yBind
             }
             _evaluator = new VariableEvaluator(_bindingLookup, _bindingCollection);
 
-            Evaluate();
+            IsStale = true;
         }
 
         public object Evaluate()
@@ -84,22 +85,28 @@ namespace FunctionZero.yBind
             {
                 try
                 {
+                    IsStale = false;
                     var stack = _compiledExpression.Evaluate(_evaluator);
                     var operand = stack.Pop();
 
                     if (operand.Type == OperandType.Variable)
                     {
                         var valueAndType = _evaluator.GetValue((string)operand.GetValue());
-                        Value = valueAndType.value;
+                        Result = valueAndType.value;
                     }
-                    Value = operand.GetValue();
+                    else
+                    {
+                        Result = operand.GetValue();
+                    }
                 }
                 catch (Exception ex)
                 {
                     throw;
                 }
             }
-            return Value;
+            // Return the backing variable rather than the property to prevent a recursive call.
+            // The getter calls Evaluate!
+            return _result;
         }
 
         private void SomethingChanged(object newValue)
