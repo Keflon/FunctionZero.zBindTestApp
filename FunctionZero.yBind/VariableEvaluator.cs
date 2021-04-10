@@ -4,31 +4,25 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
-using Xamarin.Forms;
 
-namespace FunctionZero.zBind.z
+namespace FunctionZero.yBind
 {
     internal class VariableEvaluator : IBackingStore
     {
-        private object[] _values;
+        //private object[] _values;
         private readonly IList<string> _keys;
-        private readonly Bind _bindingExtension;
+        private readonly IList<PathBind> _bindingCollection;
 
-        public VariableEvaluator(IList<string> keys, Bind bindingExtension)
+        public VariableEvaluator(IList<string> keys, IList<PathBind> bindingCollection)
         {
             _keys = keys;
-            _bindingExtension = bindingExtension;
-        }
-
-        internal void SetValues(object[] values)
-        {
-            _values = values;
+            _bindingCollection = bindingCollection;
         }
 
         public (OperandType type, object value) GetValue(string qualifiedName)
         {
             int index = _keys.IndexOf(qualifiedName);
-            object value = _values[index];
+            object value = _bindingCollection[index].Value;
 
             if (value is long longResult)
                 return (OperandType.Long, longResult);
@@ -58,29 +52,29 @@ namespace FunctionZero.zBind.z
 
         public void SetValue(string qualifiedName, object value)
         {
-            var host = _bindingExtension.Source ?? _bindingExtension.BindableTarget.BindingContext;
-            if (host != null)
-            {
-                var bits = qualifiedName.Split(_dot);
+            //var host = _bindingExtension.Source ?? _bindingExtension.BindableTarget.BindingContext;
+            //if (host != null)
+            //{
+            //    var bits = qualifiedName.Split(_dot);
 
-                for (int c = 0; c < bits.Length - 1; c++)
-                {
-                    PropertyInfo prop = host.GetType().GetProperty(bits[c], BindingFlags.Public | BindingFlags.Instance);
-                    if (null != prop && prop.CanRead)
-                    {
-                        host = prop.GetValue(host);
-                    }
-                    else
-                        return;
-                }
-                var variableName = bits[bits.Length - 1];
+            //    for (int c = 0; c < bits.Length - 1; c++)
+            //    {
+            //        PropertyInfo prop = host.GetType().GetProperty(bits[c], BindingFlags.Public | BindingFlags.Instance);
+            //        if (null != prop && prop.CanRead)
+            //        {
+            //            host = prop.GetValue(host);
+            //        }
+            //        else
+            //            return;
+            //    }
+            //    var variableName = bits[bits.Length - 1];
 
-                PropertyInfo prop2 = host.GetType().GetProperty(variableName, BindingFlags.Public | BindingFlags.Instance);
-                if (null != prop2 && prop2.CanWrite)
-                {
-                    prop2.SetValue(host, value, null);
-                }
-            }
+            //    PropertyInfo prop2 = host.GetType().GetProperty(variableName, BindingFlags.Public | BindingFlags.Instance);
+            //    if (null != prop2 && prop2.CanWrite)
+            //    {
+            //        prop2.SetValue(host, value, null);
+            //    }
+            //}
         }
     }
 }

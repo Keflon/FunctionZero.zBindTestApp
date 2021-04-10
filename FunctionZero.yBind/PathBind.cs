@@ -14,27 +14,45 @@ namespace FunctionZero.yBind
     Wrap inside an IBackingStore and feed it to an ExpressionParser
     Create an update strategy for the EP ... Immediate, deferred or manual.
     */
-    public class Bind
+    public class PathBind
     {
         private static char[] _dot = new[] { '.' };
 
         private readonly PropertyInfo _propertyInfo;
-        private readonly Bind _bindingRoot;
+        private readonly PathBind _bindingRoot;
         private readonly bool _isLeaf;
-        private object _host;
+        private readonly object _host;
         private readonly string[] _bits;
         private readonly int _currentIndex;
-        private string _propertyName;
-        private Bind _child;
+        private readonly string _propertyName;
+        private PathBind _child;
 
         private object _partValue;
-        public object Value { get; set; }
+        private object _value;
+        private readonly Action<object> _valueChanged;
 
-        public Bind(object host, string qualifiedName) : this(null, host, qualifiedName.Split(_dot), 0) { }
+        public object Value
+        {
+            get => _value;
+            set
+            {
+                if (value != _value)
+                {
+                    _value = value;
+                    _valueChanged(value);
+                }
+            }
+        }
 
-        protected Bind(Bind bindingRoot, object host, string[] bits, int currentIndex)
+        public PathBind(object host, string qualifiedName, Action<object> valueChanged = null) 
+            : this(null, valueChanged ?? ((o) => { }), host, qualifiedName.Split(_dot), 0) { }
+
+        protected PathBind(PathBind bindingRoot, Action<object> valueChanged, object host, string[] bits, int currentIndex)
         {
             _bindingRoot = bindingRoot ?? this;
+            if (_bindingRoot == this)
+                _valueChanged = valueChanged;
+
             _host = host;
             _bits = bits;
             _currentIndex = currentIndex;
@@ -56,13 +74,15 @@ namespace FunctionZero.yBind
 
             _isLeaf = _currentIndex >= _bits.Length - 1;
             if ((_isLeaf == false) && (_partValue != null))
-                _child = new Bind(_bindingRoot, _partValue, _bits, _currentIndex + 1);
+                _child = new PathBind(_bindingRoot, null, _partValue, _bits, _currentIndex + 1);
             else
                 _bindingRoot.Value = _partValue;
         }
 
-        // Called by parent
-        private void DetachFromProperty()
+        /// <summary>
+        /// Called by parent when a non-leaf value on the path changes or by the consumer when the instance is no longer wanted.
+        /// </summary>
+        public void DetachFromProperty()
         {
             if (_child != null)
                 _child.DetachFromProperty();
@@ -83,12 +103,10 @@ namespace FunctionZero.yBind
                 _partValue = _propertyInfo.GetValue(_host);
 
                 if ((_isLeaf == false) && (_partValue != null))
-                    _child = new Bind(_bindingRoot, _partValue, _bits, _currentIndex + 1);
+                    _child = new PathBind(_bindingRoot, null, _partValue, _bits, _currentIndex + 1);
                 else
                     _bindingRoot.Value = _partValue;
             }
         }
     }
 }
-// One hour 21 minutes.
-// Two hours 12 minutes to first 3 unit tests working (property, nested property, changing property on path)
