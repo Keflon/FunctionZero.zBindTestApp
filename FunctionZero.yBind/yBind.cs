@@ -4,8 +4,16 @@ using System.ComponentModel;
 using System.Reflection;
 using System.Text;
 
-namespace FunctionZero.zBind.f
+namespace FunctionZero.yBind
 {
+    /*
+    TODO:
+    Raise an event when Value changes.
+    Ensure no memory leaks when a nested property changes value, including to null.
+    Test with a path that doesn't repeat the same property names.
+    Wrap inside an IBackingStore and feed it to an ExpressionParser
+    Create an update strategy for the EP ... Immediate, deferred or manual.
+    */
     public class Bind
     {
         private static char[] _dot = new[] { '.' };
