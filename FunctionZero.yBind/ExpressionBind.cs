@@ -2,18 +2,16 @@
 using FunctionZero.ExpressionParserZero.Tokens;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
 
 namespace FunctionZero.yBind
 {
     public class ExpressionBind
     {
-        private readonly object _host;
         private readonly IList<string> _bindingLookup;
         private readonly IList<PathBind> _bindingCollection;
         private readonly VariableEvaluator _evaluator;
         private readonly ExpressionParserZero.Parser.TokenList _compiledExpression;
+        private object _result;
         private bool _isStale;
 
         public bool IsStale
@@ -30,10 +28,9 @@ namespace FunctionZero.yBind
             }
         }
 
-        private object _result;
-
         public object Result
         {
+            // Caution. Not standard pattern.
             get { return Evaluate(); }
             set
             {
@@ -51,12 +48,9 @@ namespace FunctionZero.yBind
 
         public ExpressionBind(object host, string expression)
         {
-            _host = host;
             _bindingLookup = new List<string>();
             _bindingCollection = new List<PathBind>();
-
             var ep = ExpressionParserFactory.GetExpressionParser();
-
             _compiledExpression = ep.Parse(expression);
 
             foreach (IToken item in _compiledExpression)
@@ -75,7 +69,6 @@ namespace FunctionZero.yBind
                 }
             }
             _evaluator = new VariableEvaluator(_bindingLookup, _bindingCollection);
-
             IsStale = true;
         }
 
@@ -95,9 +88,7 @@ namespace FunctionZero.yBind
                         Result = valueAndType.value;
                     }
                     else
-                    {
                         Result = operand.GetValue();
-                    }
                 }
                 catch (Exception ex)
                 {
@@ -109,9 +100,6 @@ namespace FunctionZero.yBind
             return _result;
         }
 
-        private void SomethingChanged(object newValue)
-        {
-            IsStale = true;
-        }
+        private void SomethingChanged(object newValue) => IsStale = true;
     }
 }

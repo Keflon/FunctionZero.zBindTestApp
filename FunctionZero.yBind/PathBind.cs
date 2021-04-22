@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
-using System.Text;
 
 namespace FunctionZero.yBind
 {
@@ -26,7 +24,6 @@ namespace FunctionZero.yBind
         private readonly int _currentIndex;
         private readonly string _propertyName;
         private PathBind _child;
-
         private object _partValue;
         private object _value;
         private readonly Action<object> _valueChanged;
