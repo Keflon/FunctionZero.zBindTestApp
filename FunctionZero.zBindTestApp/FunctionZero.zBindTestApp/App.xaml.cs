@@ -42,7 +42,7 @@ namespace FunctionZero.zBindTestApp
             object result = new Color(r, g, b, 1);
 
             // Push the result back onto the operand stack
-            operandStack.Push(new Operand(-1, OperandType.Double, result));
+            operandStack.Push(new Operand(-1, OperandType.Object, result));
         }
 
         private static void DoLerp(Stack<IOperand> operandStack, IBackingStore backingStore, long paramCount)
