@@ -2,20 +2,20 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>1.0.0</Version>
+    <Version>1.1.0</Version>
     <Description>Allows xaml to bind to an expression rather than just properties.</Description>
     <PackageLicenseExpression></PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/Keflon/FunctionZero.zBindTestApp</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Keflon/FunctionZero.zBindTestApp</RepositoryUrl>
     <PackageTags>Bind Binding Databind Xamarin Forms xaml expression parser evaluator</PackageTags>
-    <PackageReleaseNotes>Initial release. Fully functional.</PackageReleaseNotes>
+    <PackageReleaseNotes>Updated packages to use ExpressionParserZero V4.0.0 to gain access to all the new goodies it supports.</PackageReleaseNotes>
     <PackageLicenseFile>License.txt</PackageLicenseFile>
     <Company>FunctionZero Ltd</Company>
     <Copyright>Function Zero Ltd</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FunctionZero.ExpressionParserZero" Version="4.0.0-pre0" />
+    <PackageReference Include="FunctionZero.ExpressionParserZero" Version="4.0.0" />
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2012" />
   </ItemGroup>
 
