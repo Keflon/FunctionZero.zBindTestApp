@@ -1,4 +1,5 @@
-﻿using FunctionZero.ExpressionParserZero.Operands;
+﻿using FunctionZero.ExpressionParserZero.Evaluator;
+using FunctionZero.ExpressionParserZero.Operands;
 using FunctionZero.ExpressionParserZero.Parser;
 using System;
 using System.Collections.Generic;
@@ -10,9 +11,9 @@ namespace FunctionZero.zBind.z
     internal class EvaluatorMultiConverter : IMultiValueConverter
     {
         private readonly VariableEvaluator _evaluator;
-        private readonly TokenList _compiledExpression;
+        private readonly ExpressionTree _compiledExpression;
 
-        public EvaluatorMultiConverter(ICollection<string> keys, TokenList compiledExpression, Bind bindingExtension)
+        public EvaluatorMultiConverter(ICollection<string> keys, ExpressionTree compiledExpression, Bind bindingExtension)
         {
             _evaluator = new VariableEvaluator(new List<string>(keys), bindingExtension);
             _compiledExpression = compiledExpression;

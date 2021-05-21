@@ -27,26 +27,15 @@ namespace FunctionZero.zBind.z
 
         public (OperandType type, object value) GetValue(string qualifiedName)
         {
+
+
+
             int index = _keys.IndexOf(qualifiedName);
             object value = _values[index];
 
-            if (value is long longResult)
-                return (OperandType.Long, longResult);
 
-            if (value is int intResult)
-                return (OperandType.Long, (long)intResult);
-
-            if (value is double doubleResult)
-                return (OperandType.Double, doubleResult);
-
-            if (value is float floatResult)
-                return (OperandType.Double, (double)floatResult);
-
-            if (value is bool boolResult)
-                return (OperandType.Bool, boolResult);
-
-            if (value is string stringResult)
-                return (OperandType.String, stringResult);
+            if (BackingStoreHelpers.OperandTypeLookup.TryGetValue(value.GetType(), out var theOperandType))
+                return (theOperandType, value);
 
             if (value == null)
                 return (OperandType.Null, null);

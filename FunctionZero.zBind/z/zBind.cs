@@ -65,7 +65,7 @@ namespace FunctionZero.zBind.z
 
                 var compiledExpression = ep.Parse(Expression);
 
-                foreach (IToken item in compiledExpression)
+                foreach (IToken item in compiledExpression.RpnTokens)
                 {
                     if (item is Operand op)
                     {
