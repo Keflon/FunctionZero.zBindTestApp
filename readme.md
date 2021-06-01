@@ -1,5 +1,11 @@
 # FunctionZero.zBind
 
+## Release notes for 1.2.0
+All csharp value types supported including nullable types.  
+Casting is supported. Cast to any type found in `ExpressionParserZero.Operands.OperandType`, 
+e.g. `(NullableULong) 42`
+
+## Overview
 `z:Bind` is a `xaml` markup extension that allows you to bind directly to an `expression` 
 rather than just a `property`
 
@@ -13,7 +19,7 @@ Put simply, it allows you to do things like this:
 
 ## Features
 
-- Full parsing and evaluation of ViewModel properties
+- Full parsing and evaluation of ViewModel and/or view properties
 - Alisaing of operators, so you can represent (for example) `&&` in xaml as `AND` rather than `&amp;&amp;`
 - Registration of methods that can be called directly from `xaml`
 
@@ -29,7 +35,9 @@ And that's all there is to it, you can now `z:Bind` to any properties in your Vi
 
 ## Usage
 
-`z:Bind` to properties in your `BindingContext`, like this:
+Just like the `Xamarin.Forms` `Binding` object, `z:Bind` binds to properties in your `BindingContext` 
+by default, 
+or you can specify any suitable alternative by setting the `Source` property:
 
 |Sample|Notes|
 |--|:--:|
@@ -47,42 +55,55 @@ You can do this by enclosing the string inside quotes, like this:
 ```xaml
 {z:Bind 'SomeFunction(param1, param2)'}
 ```
+Similar to `xaml`, string literals can be enclosed within 'single quotes' or "double quotes" and appropriate use 
+of `xml` escape-sequences.
 ### Casting
-Numeric constants will be of type `long` unless they have a fractional part, so `Sin(1)` will fail, because the `Sin` function expects a `double`; `Sin(1.0)` comes to the rescue.
+Functions expect their parameters to be of the correct type, so `Sin(someFloat)` will throw an exception. 
+`Sin((Double)someFloat)` is here to help.  
+See `ExpressionParserZero.Operands.OperandType` for all the types you can cast to.
+
 ### Short-circuit
-Unlike `c#` the underlying expression parser does not support short-circuit, so be careful with expressions like `(thing != null) AND (thing.part == 5)`
+Just like `c#`, the underlying expression parser supports short-circuit, so expressions like 
+`(thing != null) AND (thing.part == 5)` will work even if `thing` is `null`
 ### Errors
 Error reporting is quite good, so check the debug output if things aren't working as expected.
 
 ### Aliases supported to simplify xaml
-|Operator|Alias|
-|:--:|:--:|
-|<|LT|
-|>|GT|
-|>=|GTE|
-|<=|LTE|
-|&|BAND|
-|\||BOR|
-|&&|AND|
-| \|\||OR|
 
-### Supported value types
-`long`, `double`, `bool` and their `nullable` variants
+|Alias|Operator|
+|--|:--:|
+|NOT|!|
+|MOD|%|
+|LT|<|
+|GT|>|
+|GTE|>=|
+|LTE|<=|
+|BAND|&| 
+|XOR|^| 
+|BOR|\||
+|AND|&&|
+|OR| \|\||
 
-Lower precision types (`int`, `char`, `float` etc) are cast to their appropriate supported type before evaluation.
+## Supported value types
+All `csharp` value types are supported, see the enum `ExpressionParserZero.Operands.OperandType` 
+for a complete list
 
 ### Supported reference types
 `string`, `object`
 
-## Advanced Usage - Functions, aliases and operator-overloads
- `z:Bind` uses [`FunctionZero.ExpressionParserZero`](https://github.com/Keflon/FunctionZero.ExpressionParserZero) to do the heavy lifting, so take a look at the [documentation](https://github.com/Keflon/FunctionZero.ExpressionParserZero)
+### Advanced Usage - Functions, aliases and operator-overloads
+ `z:Bind` uses [`FunctionZero.ExpressionParserZero`](https://www.nuget.org/packages/FunctionZero.ExpressionParserZero) 
+to do the heavy lifting, so take a look at the [documentation](https://github.com/Keflon/FunctionZero.ExpressionParserZero)
 if you want to take a deeper dive. Here is a taster ...
 
 ### Functions
-`Sin`, `Cos` and `Tan` are registered by default, as are the _aliases_ listed above.
+`Sin`, `Cos` and `Tan` and more are 
+[registered by default](https://github.com/Keflon/FunctionZero.ExpressionParserZero#functions), 
+as are the _aliases_ listed above.  
 ```xaml
 <Label TranslationX="{z:Bind Sin(Count / 25.0) * 100.0}" ...
 ```
+**Note: `Lerp` is also pre-registered; the following is just for example.**
 Suppose you wanted a new function to to do a linear interpolation between two values, like this:
 ```csharp
 double Lerp(double a, double b, double t)
@@ -98,7 +119,7 @@ First you will need a reference to the default ExpressionParser
 ```csharp
 var ep = ExpressionParserFactory.GetExpressionParser();
 ```
-Then _register_ a _function_ that takes 3 parameters: (Note, at time of writing, the parameter count is not enforced or meaningful)
+Then _register_ a _function_ that takes 3 parameters:
 ```csharp
 ep.RegisterFunction("Lerp", DoLerp, 3);
 ```
@@ -164,13 +185,18 @@ Putting the above into action, you can then start to really have some fun
     Rotation="{z:Bind Lerp(0, 360, rotationPercent / 100.0)}"
 />
 ```
-If that's not enough, you can entirely replace the `ExpressionParser` with your own by calling `ExpressionParserFactory.ReplaceDefaultExpressionParser(..)` This is how `z:Bind` creates the default parser and can be used as a guide to creating your own:
+If that's not enough, you can entirely replace the `ExpressionParser` with your own by calling 
+`ExpressionParserFactory.ReplaceDefaultExpressionParser(..)` This is how `z:Bind` created the 
+default parser **before these registrations were moved to 
+[ExpressionParserZero](https://github.com/Keflon/FunctionZero.ExpressionParserZero)** and can be used as a 
+guide to creating your own:
 ```csharp
 var ep = new ExpressionParser();
 
 ep.RegisterFunction("Sin", DoSin, 1, 1);
 ep.RegisterFunction("Cos", DoCos, 1, 1);
 ep.RegisterFunction("Tan", DoTan, 1, 1);
+...
 
 ep.RegisterOperator("AND", 4, LogicalAndMatrix.Create());
 ep.RegisterOperator("OR", 4, LogicalOrMatrix.Create());
@@ -213,6 +239,7 @@ private static void DoTan(Stack<IOperand> stack, IBackingStore store, long param
 ## Even more ...
 
 ### Assignment operator:
+Set the property `Sample.Value`
 ```xaml
 <Label Text="{z:Bind 'Sample.Value = Interest * Complexity'}" />
 ```
