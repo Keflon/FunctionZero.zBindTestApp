@@ -1,6 +1,7 @@
 ﻿using FunctionZero.ExpressionParserZero;
 using FunctionZero.ExpressionParserZero.BackingStore;
 using FunctionZero.ExpressionParserZero.Operands;
+using FunctionZero.ExpressionParserZero.Parser;
 using FunctionZero.MvvmZero;
 using FunctionZero.zBind.z;
 using FunctionZero.zBindTestApp.Mvvm.Pages;
@@ -17,9 +18,8 @@ namespace FunctionZero.zBindTestApp
         public App(IPageServiceZero pageService)
         {
             InitializeComponent();
-            var ep = ExpressionParserFactory.GetExpressionParser();
-            ep.RegisterFunction("GetColor", DoGetColor, 3, 3);
-            ep.RegisterFunction("Lerp", DoLerp, 3, 3);
+            var parser = ExpressionParserZero.Binding.ExpressionParserFactory.GetExpressionParser();
+            parser.RegisterFunction("GetColor", DoGetColor, 3, 3);
 
             MainPage = pageService.MakePage<HomePage, HomePageVm>(async (vm) => await vm.InitAsync());
         }
@@ -43,25 +43,6 @@ namespace FunctionZero.zBindTestApp
 
             // Push the result back onto the operand stack
             operandStack.Push(new Operand(-1, OperandType.Object, result));
-        }
-
-        private static void DoLerp(Stack<IOperand> operandStack, IBackingStore backingStore, long paramCount)
-        {
-            // Pop the correct number of parameters from the operands stack, ** in reverse order **
-            // If an operand is a variable, it is resolved from the backing store provided
-            IOperand third = OperatorActions.PopAndResolve(operandStack, backingStore);
-            IOperand second = OperatorActions.PopAndResolve(operandStack, backingStore);
-            IOperand first = OperatorActions.PopAndResolve(operandStack, backingStore);
-
-            double a = (double)first.GetValue();
-            double b = (double)second.GetValue();
-            double t = (double)third.GetValue();
-
-            // The result is of type double
-            double result = a + t * (b - a);
-
-            // Push the result back onto the operand stack
-            operandStack.Push(new Operand(-1, OperandType.Double, result));
         }
 
         protected override void OnStart()

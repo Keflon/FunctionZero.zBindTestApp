@@ -57,8 +57,9 @@ namespace FunctionZero.zBind.z
                 bindingSourceObject = BindableTarget.BindingContext;
             }
 
-            var ep = ExpressionParserFactory.GetExpressionParser();
-
+            //var ep = ExpressionParserFactory.GetExpressionParser();
+            var ep = ExpressionParserZero.Binding.ExpressionParserFactory.GetExpressionParser();
+            
             try
             {
                 _multiBind = new MultiBinding();
