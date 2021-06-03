@@ -1,6 +1,6 @@
 # FunctionZero.zBind
 
-## Release notes for 1.2.0
+## Release notes for 1.2.1
 All csharp value types supported including nullable types.  
 Casting is supported. Cast to any type found in `ExpressionParserZero.Operands.OperandType`, 
 e.g. `(NullableULong) 42`
