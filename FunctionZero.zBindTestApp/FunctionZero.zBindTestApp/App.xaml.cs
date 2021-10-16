@@ -17,6 +17,8 @@ namespace FunctionZero.zBindTestApp
     {
         public App(IPageServiceZero pageService)
         {
+            pageService.Init(this);
+
             InitializeComponent();
             var parser = ExpressionParserZero.Binding.ExpressionParserFactory.GetExpressionParser();
             parser.RegisterFunction("GetColor", DoGetColor, 3, 3);

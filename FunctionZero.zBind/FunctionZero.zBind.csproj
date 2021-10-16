@@ -21,7 +21,7 @@ Aliases are pre-registered.</PackageReleaseNotes>
 
   <ItemGroup>
     <PackageReference Include="FunctionZero.ExpressionParserZero" Version="5.0.1" />
-    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2012" />
+    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2125" />
   </ItemGroup>
 
   <ItemGroup>
