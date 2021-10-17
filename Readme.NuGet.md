@@ -3,7 +3,7 @@
 If you want to do things like this:
 ```xaml
 <StackLayout 
-	IsVisible="{z:Bind (Item.Count != 0) AND (Status == 'Administrator')}" > ...
+	IsVisible="{z:Bind (Item.Count != 0) AND (Status == \'Administrator\')}" > ...
 ```
 
 Install 
