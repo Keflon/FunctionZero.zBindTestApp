@@ -1,11 +1,18 @@
 # FunctionZero.zBind
 
+## Release notes for 1.2.2
+Amended the example showing  
+ ~~`... Status == 'Administrator' ... `~~  
+to  
+`Status == \'Administrator\' ...`  
+ 
+Added notes about escaping strings [below](#the-great-escape-and-other-cautionary-tales)
 ## Release notes for 1.2.1
 All csharp value types supported including nullable types.  
 Casting is supported. Cast to any type found in `ExpressionParserZero.Operands.OperandType`, 
 e.g. `(NullableULong) 42`
 
-## Overview
+# Overview
 `z:Bind` is a `xaml` markup extension that allows you to bind directly to an `expression` 
 rather than just a `property`
 
@@ -48,6 +55,8 @@ or you can specify any suitable alternative by setting the `Source` property:
 |`{z:Bind Sin(Count / 25.0)}`| Calls a _function_ (see below)|
 
 ## The Great Escape, and other cautionary tales
+Similar to `xaml`, string literals can be enclosed within 'single quotes' or "double quotes" with appropriate use 
+of `xml` escape-sequences.
 ### Commas
 If your _expression string_ has commas in it, you must hide them from the xaml parser, otherwise `z:Bind` will be given an incomplete string and things won't work as expected. 
 
@@ -55,8 +64,27 @@ You can do this by enclosing the string inside quotes, like this:
 ```xaml
 {z:Bind 'SomeFunction(param1, param2)'}
 ```
-Similar to `xaml`, string literals can be enclosed within 'single quotes' or "double quotes" and appropriate use 
-of `xml` escape-sequences.
+### Strings
+
+If your _expression string_ has string literals in it, you must 'escape' them, otherwise `z:Bind` will be given an incorrect string and things won't work as expected.   
+For example:
+```xaml
+{z:Bind Status == \'Administrator\'}
+```
+
+### Long form
+If your expression is getting bogged down in escape-sequences and commas and quotes, or if that's just the way you roll, 
+you can use the long-form of expressing a z:Bind expression:
+```xml
+<Label>
+    <Label.Text>
+        <z:Bind>
+            'Score: '+ Count + ' points'
+        </z:Bind>
+    </Label.Text>
+</Label>
+```
+
 ### Casting
 Functions expect their parameters to be of the correct type, so `Sin(someFloat)` will throw an exception. 
 `Sin((Double)someFloat)` is here to help.  

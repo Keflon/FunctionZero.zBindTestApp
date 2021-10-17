@@ -6,14 +6,10 @@ If you want to do things like this:
 	IsVisible="{z:Bind (Item.Count != 0) AND (Status == \'Administrator\')}" > ...
 ```
 
-Install 
+1. Install `FunctionZero.zBind` to your shared project
+2. add  `xmlns:z="clr-namespace:FunctionZero.zBind.z;assembly=FunctionZero.zBind"`  
+To your `xaml` page (or let Visual Studio do it for you)
+3. That's all you need to do :)
 
-`FunctionZero.zBind` 
-
-to your shared project and add 
-
-`xmlns:z="clr-namespace:FunctionZero.zBind.z;assembly=FunctionZero.zBind"`
-
-To your `xaml` page (or let Visual Studio do it for you). Simple as that!
-
-Head over [here](https://github.com/Keflon/FunctionZero.zBindTestApp) for `source code`, `documentation` and a `sample application`
+Head over [here](https://github.com/Keflon/FunctionZero.zBindTestApp) for 
+source code, documentation and a sample application

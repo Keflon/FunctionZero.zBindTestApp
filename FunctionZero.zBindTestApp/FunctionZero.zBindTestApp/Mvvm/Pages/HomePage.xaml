@@ -10,7 +10,7 @@
             <!--<Label  VerticalOptions="Start" Margin="50">
                 <Label.Text>
                     <z:Bind>
-                           'Score: '+ Count + '   bananas'
+                           'Score: '+ Count + '   things'
                     </z:Bind>
                 </Label.Text>
             </Label>-->
