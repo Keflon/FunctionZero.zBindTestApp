@@ -7,7 +7,9 @@
              >
     <ContentPage.Content>
         <Grid>
-            <Label Text="{z:Bind 'TestInstance.TestLong = Count'}" VerticalOptions="End" Margin="50"/>
+            <!--<Label Text="{z:Bind 'TestInstance.TestLong = Count'}" VerticalOptions="End" Margin="50"/>-->
+            <Label Text="{z:Bind '&quot;hello &quot; + Count*2'}" VerticalOptions="End" Margin="50"/>
+            <Label Text="{z:Bind 'OtherTestInstance != null'}" VerticalOptions="End" HorizontalOptions="End" Margin="50"/>
             <Label Text="Welcome to z:Bind!" HorizontalOptions="Center" VerticalOptions="Center"
                 TranslationX="{z:Bind Sin(Count / 25.0) * 100.0}"
                 TranslationY="{z:Bind Cos(Count / 15.0) * 100}"

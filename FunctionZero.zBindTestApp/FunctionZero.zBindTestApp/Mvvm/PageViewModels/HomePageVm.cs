@@ -24,6 +24,10 @@ namespace FunctionZero.zBindTestApp.Mvvm.PageViewModels
         }
 
         public TestClass TestInstance { get; }
+        /// <summary>
+        /// Always null, used for test.
+        /// </summary>
+        public TestClass OtherTestInstance { get; }
 
         public async Task InitAsync()
         {

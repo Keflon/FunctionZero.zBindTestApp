@@ -27,18 +27,14 @@ namespace FunctionZero.zBind.z
 
         public (OperandType type, object value) GetValue(string qualifiedName)
         {
-
-
-
             int index = _keys.IndexOf(qualifiedName);
             object value = _values[index];
 
-
-            if (BackingStoreHelpers.OperandTypeLookup.TryGetValue(value.GetType(), out var theOperandType))
-                return (theOperandType, value);
-
             if (value == null)
                 return (OperandType.Null, null);
+            
+            if (BackingStoreHelpers.OperandTypeLookup.TryGetValue(value.GetType(), out var theOperandType))
+                return (theOperandType, value);
 
             return (OperandType.Object, value);
         }
