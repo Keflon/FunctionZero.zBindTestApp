@@ -40,9 +40,9 @@ namespace FunctionZero.zBindTestApp.Mvvm.PageViewModels
             return base.IsOwnerPageVisible;
         }
 
-        public override void OwnerPageAppearing()
+        public override void OnOwnerPageAppearing()
         {
-            base.OwnerPageAppearing();
+            base.OnOwnerPageAppearing();
             Device.StartTimer(TimeSpan.FromMilliseconds(22), MyTimerCallback);
         }
     }
