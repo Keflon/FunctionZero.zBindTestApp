@@ -2,13 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>1.2.3</Version>
+    <Version>1.2.4</Version>
     <Description>Allows xaml to bind to an expression rather than just properties.</Description>
     <PackageLicenseExpression></PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/Keflon/FunctionZero.zBindTestApp</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Keflon/FunctionZero.zBindTestApp</RepositoryUrl>
     <PackageTags>Bind Binding Databind Xamarin Forms ios android uwp xaml expression parser evaluator short circuit POCO zbind</PackageTags>
-    <PackageReleaseNotes>Fixed an NRE when binding to objects whose value is null. This fixes for example the evaluation of 'thing != null' when 'thing' *is* null.</PackageReleaseNotes>
+    <PackageReleaseNotes>Updated to ExpressionParserZero 5.0.2 to fix short-circuit problem.
+Updated to Xamarin.Forms 5.0.0.2196.</PackageReleaseNotes>
     <PackageLicenseFile>License.txt</PackageLicenseFile>
     <Company>FunctionZero Ltd</Company>
     <Copyright>Function Zero Ltd</Copyright>
