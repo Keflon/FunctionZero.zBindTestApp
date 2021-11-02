@@ -16,7 +16,6 @@
             </Label>-->
             <Label Text="{z:Bind \'String \' + Count + \' concatenation\'}" VerticalOptions="Start" Margin="50"/>
             <Label Text="{z:Bind 'OtherTestInstance != null'}" VerticalOptions="End" HorizontalOptions="End" Margin="50"/>
-
             
             <Label Text="{z:Bind 'Count/ 2' }" VerticalOptions="End" Margin="50"/>
             <Label Text="Welcome to z:Bind!" HorizontalOptions="Center" VerticalOptions="Center"

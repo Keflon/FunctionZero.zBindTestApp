@@ -11,11 +11,18 @@ namespace FunctionZero.zBindTestApp.Mvvm.PageViewModels
     public class HomePageVm : MvvmZeroBaseVm
     {
         private long _count;
+        private bool _isTest;
 
         public long Count
         {
             get => _count;
             set => SetProperty(ref _count, value);
+        }
+
+        public bool IsTest
+        {
+            get => _isTest;
+            set => SetProperty(ref _isTest, value);
         }
 
         public HomePageVm()
@@ -37,6 +44,7 @@ namespace FunctionZero.zBindTestApp.Mvvm.PageViewModels
         private bool MyTimerCallback()
         {
             Count++;
+            IsTest = (Count & 64L) != 0;
             return base.IsOwnerPageVisible;
         }
 

@@ -1,9 +1,9 @@
 `z:Bind` is a `xaml` markup extension for `Xamarin.Forms` that allows you to bind directly to an `expression` 
 
-If you want to do things like this:
+If you want to do things like this: (note the expression is enclosed inside quotes)
 ```xaml
 <StackLayout 
-	IsVisible="{z:Bind (Item.Count != 0) AND (Status == \'Administrator\')}" > ...
+	IsVisible="{z:Bind '(Item.Count != 0) AND (Status == \'Administrator\')'}" > ...
 ```
 
 1. Install `FunctionZero.zBind` to your shared project
