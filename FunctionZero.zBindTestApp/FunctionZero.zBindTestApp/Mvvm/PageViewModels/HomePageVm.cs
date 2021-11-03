@@ -12,6 +12,8 @@ namespace FunctionZero.zBindTestApp.Mvvm.PageViewModels
     {
         private long _count;
         private bool _isTest;
+        private bool _isTest2;
+        private double _sliderValue;
 
         public long Count
         {
@@ -23,6 +25,16 @@ namespace FunctionZero.zBindTestApp.Mvvm.PageViewModels
         {
             get => _isTest;
             set => SetProperty(ref _isTest, value);
+        }
+        public bool IsTest2
+        {
+            get => _isTest2;
+            set => SetProperty(ref _isTest2, value);
+        }
+        public double SliderValue
+        {
+            get => _sliderValue;
+            set => SetProperty(ref _sliderValue, value);
         }
 
         public HomePageVm()
