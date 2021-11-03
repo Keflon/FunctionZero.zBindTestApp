@@ -1,10 +1,7 @@
 ﻿using FunctionZero.ExpressionParserZero.BackingStore;
 using FunctionZero.ExpressionParserZero.Operands;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
-using Xamarin.Forms;
 
 namespace FunctionZero.zBind.z
 {
@@ -32,7 +29,7 @@ namespace FunctionZero.zBind.z
 
             if (value == null)
                 return (OperandType.Null, null);
-            
+
             if (BackingStoreHelpers.OperandTypeLookup.TryGetValue(value.GetType(), out var theOperandType))
                 return (theOperandType, value);
 
@@ -66,6 +63,39 @@ namespace FunctionZero.zBind.z
                     prop2.SetValue(host, value, null);
                 }
             }
+        }
+
+        public void SetValue(PropertyInfo propInfo, object value)
+        {
+            var host = _bindingExtension.Source ?? _bindingExtension.BindableTarget.BindingContext;
+            if (host != null)
+            {
+                propInfo.SetValue(host, value, null);
+            }
+        }
+
+        public PropertyInfo GetPropertyInfo(string qualifiedName)
+        {
+            var host = _bindingExtension.Source ?? _bindingExtension.BindableTarget.BindingContext;
+            if (host != null)
+            {
+                var bits = qualifiedName.Split(_dot);
+
+                for (int c = 0; c < bits.Length - 1; c++)
+                {
+                    PropertyInfo prop = host.GetType().GetProperty(bits[c], BindingFlags.Public | BindingFlags.Instance);
+                    if (null != prop && prop.CanRead)
+                    {
+                        host = prop.GetValue(host);
+                    }
+                    else
+                        return null;
+                }
+                var variableName = bits[bits.Length - 1];
+
+                return host.GetType().GetProperty(variableName, BindingFlags.Public | BindingFlags.Instance);
+            }
+            return null;
         }
     }
 }
