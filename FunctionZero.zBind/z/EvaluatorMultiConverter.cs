@@ -2,6 +2,7 @@
 using FunctionZero.ExpressionParserZero.Evaluator;
 using FunctionZero.ExpressionParserZero.Operands;
 using FunctionZero.ExpressionParserZero.Tokens;
+using FunctionZero.ExpressionParserZero.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -24,7 +25,7 @@ namespace FunctionZero.zBind.z
             _compiledExpressionTree = compiledExpression;
 
             // If the ExpressionTree has a variable at the leaf, where all ancestors are a unary operator,
-            // we can build an expression into an expression that does the opposite. Bail out if that's not possible.
+            // we can build an expression that does the opposite. Bail out if that's not possible.
 
             // This ExpressionTree will lie about its RpnTokens.
             var unExpressionTree = new ExpressionTree(new List<IToken>());
@@ -48,7 +49,7 @@ namespace FunctionZero.zBind.z
                     // Placeholder
                     _unExpressionTreeParentList.Add(new ExpressionTreeNode(null, 0));
                     // node is the variable we want to assign.
-                    _variableName = (string)((Operand)node.Token).GetValue();
+                    _variableName = (string)(operand).GetValue();
                     _unExpressionTree = unExpressionTree;
                 }
             }
