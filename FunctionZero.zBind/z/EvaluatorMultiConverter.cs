@@ -49,7 +49,7 @@ namespace FunctionZero.zBind.z
                     // Placeholder
                     _unExpressionTreeParentList.Add(new ExpressionTreeNode(null, 0));
                     // node is the variable we want to assign.
-                    _variableName = (string)(operand).GetValue();
+                    _variableName = (string)operand.GetValue();
                     _unExpressionTree = unExpressionTree;
                 }
             }
