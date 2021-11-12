@@ -19,7 +19,7 @@ rather than just a `property`
 Put simply, it allows you to do things like this:
 ```xaml
 <StackLayout 
-	IsVisible="{z:Bind (Item.Count != 0) AND (Status == \'Administrator\'}" > ...
+	IsVisible="{z:Bind '(Item.Count != 0) AND (Status == \'Administrator\' '}" > ...
 ```
 
 `Expressions` are re-evaluated only if a `property` on which they depend changes
