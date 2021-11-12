@@ -16,8 +16,8 @@ Updated to Xamarin.Forms 5.0.0.2196.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FunctionZero.ExpressionParserZero" Version="5.0.2" />
-    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2196" />
+    <PackageReference Include="FunctionZero.ExpressionParserZero" Version="5.1.0" />
+    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2478" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,6 +25,12 @@ Updated to Xamarin.Forms 5.0.0.2196.</PackageReleaseNotes>
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Drawing.Common">
+      <HintPath>..\..\..\Program Files\Microsoft Visual Studio\2022\Preview\Common7\IDE\ReferenceAssemblies\Microsoft\Framework\Xamarin.iOS\v1.0\Facades\System.Drawing.Common.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

@@ -14,6 +14,17 @@
                     </z:Bind>
                 </Label.Text>
             </Label>-->
+
+            <ListView ItemsSource="{Binding ListDataSource}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Label Text="{z:Bind 'TestCountingLong'}"/>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
             <Label Text="{z:Bind \'String \' + Count + \' concatenation\'}" VerticalOptions="Start" Margin="50"/>
             <Label Text="{z:Bind 'OtherTestInstance == null'}" VerticalOptions="End" HorizontalOptions="End" Margin="50"/>
 

@@ -2,6 +2,7 @@
 using FunctionZero.zBindTestApp.Mvvm.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
@@ -14,6 +15,8 @@ namespace FunctionZero.zBindTestApp.Mvvm.PageViewModels
         private bool _isTest;
         private bool _isTest2;
         private double _sliderValue;
+
+        public ObservableCollection<TestClass> ListDataSource { get; }
 
         public long Count
         {
@@ -41,6 +44,13 @@ namespace FunctionZero.zBindTestApp.Mvvm.PageViewModels
         {
             TestInstance = new TestClass();
             SliderValue = -0.75;
+
+            ListDataSource = new ObservableCollection<TestClass>();
+
+            for(int c=0;c<5;c++)
+            {
+                ListDataSource.Add(new TestClass() { TestCountingLong = c});
+            }
         }
 
         public TestClass TestInstance { get; }

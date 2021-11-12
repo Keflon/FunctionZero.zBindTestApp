@@ -1,4 +1,5 @@
-﻿using FunctionZero.ExpressionParserZero.Exceptions;
+﻿using FunctionZero.ExpressionParserZero.Binding;
+using FunctionZero.ExpressionParserZero.Exceptions;
 using FunctionZero.ExpressionParserZero.Operands;
 using FunctionZero.ExpressionParserZero.Tokens;
 using System;
@@ -7,6 +8,8 @@ using System.Diagnostics;
 using System.Xml;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+
+[assembly: XmlnsPrefix("FunctionZero.zBind.z", "zero")]
 
 namespace FunctionZero.zBind.z
 {
@@ -43,22 +46,14 @@ namespace FunctionZero.zBind.z
                 throw new XamlParseException("ZeroBind requires 'Expression' property to be set", lineInfo);
             }
 
-            object bindingSourceObject;
-
-            if (Source != null)
-            {
-                bindingSourceObject = Source;
-            }
-            else
+            if(Source ==  null)
             {
                 IProvideValueTarget pvt = serviceProvider.GetService(typeof(IProvideValueTarget)) as IProvideValueTarget;
                 BindableTarget = pvt.TargetObject as BindableObject;
-
-                bindingSourceObject = BindableTarget.BindingContext;
             }
 
-            //var ep = ExpressionParserFactory.GetExpressionParser();
-            var ep = ExpressionParserZero.Binding.ExpressionParserFactory.GetExpressionParser();
+            var ep = ExpressionParserFactory.GetExpressionParser();
+            //var ep = ExpressionParserZero.Binding.ExpressionParserFactory.GetExpressionParser();
             
             try
             {
@@ -74,7 +69,7 @@ namespace FunctionZero.zBind.z
                         {
                             if (_bindingLookup.Contains(op.ToString()) == false)
                             {
-                                var binding = new Binding(op.ToString(), BindingMode.OneWay, null, null, null, bindingSourceObject);
+                                var binding = new Binding(op.ToString(), BindingMode.OneWay, null, null, null, Source);
                                 _bindingLookup.Add(op.ToString());
                                 _multiBind.Bindings.Add(binding);
                             }

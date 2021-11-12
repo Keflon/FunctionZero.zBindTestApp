@@ -2,7 +2,6 @@
 using FunctionZero.ExpressionParserZero.Evaluator;
 using FunctionZero.ExpressionParserZero.Operands;
 using FunctionZero.ExpressionParserZero.Tokens;
-using FunctionZero.ExpressionParserZero.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
