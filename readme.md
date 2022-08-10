@@ -1,5 +1,7 @@
 # FunctionZero.zBind
-
+NuGet package [here](https://www.nuget.org/packages/FunctionZero.zBind)  
+MAUI version [here](https://github.com/Keflon/FunctionZero.Maui.zBind)  
+MAUI NuGet [here](https://www.nuget.org/packages/FunctionZero.Maui.zBind)  
 ## Release notes for 1.2.2
 Amended the example showing  
  ~~`... Status == 'Administrator' ... `~~  
