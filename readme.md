@@ -88,9 +88,10 @@ you can use the long-form of expressing a z:Bind expression:
 ```
 
 ### Casting
-Functions expect their parameters to be of the correct type, so `Sin(someFloat)` will throw an exception. 
-`Sin((Double)someFloat)` is here to help.  
-See `ExpressionParserZero.Operands.OperandType` for all the types you can cast to.
+Casting of function parameters follows `csharp` rules, so for example `Sin(someFloat)` is fine even though `Sin` expects a `double`.  
+You can explicitly cast to any `csharp` type if you so wish, e.g. `Sin((Double)someFloat)`  
+See `ExpressionParserZero.Operands.OperandType` for all the types you can cast to.  
+
 
 ### Short-circuit
 Just like `c#`, the underlying expression parser supports short-circuit, so expressions like 
