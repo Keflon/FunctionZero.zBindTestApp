@@ -17,7 +17,7 @@
 
   <ItemGroup>
     <PackageReference Include="FunctionZero.ExpressionParserZero" Version="5.2.0" />
-    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2478" />
+    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2545" />
   </ItemGroup>
 
   <ItemGroup>
